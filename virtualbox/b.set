@@ -1,0 +1,45 @@
+APP=WeChat
+AUDIO_GID=29
+BASH=/bin/bash
+BASHOPTS=cmdhist:complete_fullquote:extquote:force_fignore:hostcomplete:interactive_comments:progcomp:promptvars:sourcepath
+BASH_ALIASES=()
+BASH_ARGC=()
+BASH_ARGV=()
+BASH_CMDS=()
+BASH_LINENO=([0]="0")
+BASH_SOURCE=([0]="/entrypoint.sh")
+BASH_VERSINFO=([0]="4" [1]="4" [2]="19" [3]="1" [4]="release" [5]="i686-pc-linux-gnu")
+BASH_VERSION='4.4.19(1)-release'
+DEBIAN_FRONTEND=noninteractive
+DIRSTACK=()
+DISPLAY=unix:0
+EUID=0
+GID=1000
+GROUPS=()
+GTK_IM_MODULE=fcitx
+HOME=/root
+HOSTNAME=xmint
+HOSTTYPE=i686
+IFS=$' \t\n'
+LANG=zh_CN.UTF-8
+LANGUAGE=zh_CN.UTF-8
+LC_ALL=zh_CN.UTF-8
+MACHTYPE=i686-pc-linux-gnu
+OPTERR=1
+OPTIND=1
+OSTYPE=linux-gnu
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PIPESTATUS=([0]="0")
+PPID=0
+PS4='+ '
+PWD=/
+QT_IM_MODULE=fcitx
+SHELL=/bin/bash
+SHELLOPTS=braceexpand:hashall:interactive-comments
+SHLVL=1
+TERM=xterm
+TZ=UTC-8
+UID=1000
+VIDEO_GID=39
+XMODIFIERS=@im=fcitx
+_=env

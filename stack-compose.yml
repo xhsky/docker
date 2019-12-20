@@ -1,0 +1,139 @@
+version: "3"
+services:
+  web:
+    image:    指定容器使用的image
+    init:     在容器内运行一个init以发送信号或获取进程. 值为true(使用默认的init)或指定一个自定义的路径(/usr/libexec/docker-init)
+    command: 覆盖默认的Command. 两种格式: 1. cmd arg1 arg2 2.["cmd", "arg1", "arg2"]
+    entrypoint: /path/file            覆盖默认的entrypoint且忽略cmd命令
+    isolation:  指定容器的隔离技术, Linux只支持default(使用Linux namespace)
+    volumes: 将主机路径或数据卷挂载到容器中
+      - type: volume|bind|tmpfs
+        source: volume1
+        target: /path
+        read_only: true       
+        bind:                     配置额外的bind选项
+          propagation:            用于bind的传播模式
+        volume:                   配置额外volume选项
+          nocopy: true            在创建卷时禁止从容器中拷贝数据
+        tmpfs:                    配置额外的tmpfs选项
+          size: N                 tmpfs挂载大小, 字节
+        consistency:              mount的一致性要求
+    configs: 定义services配置, 两种语法变体
+      短语法: 只支持指定config名称, 授予container访问config
+      注: config必须已存在或在stack文件中顶级configs配置中被定义, 否则stack部署出错
+    logging:          为服务记录配置
+      driver: json-file|syslog|none   指定记录驱动, 默认json-file
+      option:                         参数, 为key-value形式
+        key: value
+    networks: 要加入的网络, 引用顶级networks下的条目
+      - network1
+      - network2
+      或:
+      network-1:
+        aliases:
+          - alias1
+          - alias2
+    pid: 
+    deploy: 指定服务部署和运行相关的配置
+      endpoint_mode: vip|dnsrr        为连接到swarm的客户端指定服务发现方式, 默认vip
+      mode: global|replicated         默认replicated
+      replicas: N                     当mode为replicated时生效
+      placement:                      指定约束和喜好的位置
+        constraints:                  限制任务被调度的节点
+          - node.id == 
+          - node.hostname !=
+          - node.role == manager
+          - node.labels.<labelname> ==        用户自定义node lable(docker node update)
+          - engine.labels.<labelname> ==      docker engine label
+        preferences:                          将服务均匀地划分到不同类别的node上(按labelname的值均匀分配). 按顺序划分
+          - spread: node.labels.<labelname>   node标签
+          - spread: engine.labels.<labelname> engine标签
+      resources:                      资源约束
+        limits:                       
+          cpus: '0.5'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+      restart_policy:                 配置容器重启策略
+        condition: none|on-failure|any    默认any
+        delay: 5s                     两次尝试重启的间隔, 默认0
+        max_attempts: N               最多尝试重启多少次, 默认无限
+        window: 120s                  在决定重启成功前等待的时间(有的容器启动时间长), 默认立刻
+      rollback_config:                服务更新失败如何回滚
+        parallelism:                  同时回滚的容器数量, 默认为0(所有容器同时回滚)
+        delay:                        两个容器组回滚的间隔(默认0s)
+        failure_action: continue|pause  回滚失败的行为, 默认pause
+        monitor:                        每次task更新后的等待时间以监控失败(ns|us|ms|s|m|h), 默认0s
+        max_failure_ratio:              回滚期间容忍的失败率, 默认0
+        order: stop-first|start-first   回滚期间的操作顺序, 默认stop-first
+      update_config:                  服务更新方式
+        parallelism:                  同时更新的容器数量,
+        delay:                        两个容器组更新的间隔(默认0s)
+        failure_action: continue|pause|rollback  更新失败的行为, 默认pause
+        monitor:                        每次task更新后的等待时间以监控失败(ns|us|ms|s|m|h), 默认0s
+        max_failure_ratio:              更新期间容忍的失败率, 默认0
+        order: stop-first|start-first   更新期间的操作顺序, 默认stop-first
+      labels:                        为服务指定labels, 只在服务上显示
+        key: value
+    labels:                          为容器指定labels, 在服务的所有容器上显示. array or dict
+        key: value
+    dns:                             指定dns服务器. 或 dns: ip
+      - ip1
+      - ip2
+    dns_search:                      指定dns搜索域, 或 dns_search: ip
+      - ip1
+      - ip2
+    env_file: file                    从文件中添加环境变量. 文件格式为每行 var=value 空行或#开头被忽略. value的形式不会被处理, 原样被传递.   value or a list. 若为list, 文件从上到下被处理, 上方的变量会被覆盖
+    environment:                      添加环境变量, 数组或字典. 该部分的值会覆盖env_file中的值. true|false|yes|no为bool值. 无value的单独key将被解析为compose正在运行的值
+    expose:                           暴露端口, 但不发布.仅仅被连接到services访问
+      - "80"
+      - "8080"
+    ports:                            暴露端口
+      - target: 80
+        published: 8080
+        protocol: tcp
+        mode: ingress
+    extra_hosts:                      添加主机映射, 会在服务的容器内的/etc/hosts内添加主机条目(host1 ip1)
+      - "host1:ip1"
+      - "host2:ip2"
+    healthcheck:                      配置检查以确定服务的容器是否健康
+      test: 
+      interval:
+      timeout:
+      retries:
+      start_period:
+    stop_grace_period: N              发送sigterm之后等待多长时间再发送sigkill, 默认10s
+    stop_signal: SIGUSR1              设置替代的信号来停止容器, 默认使用SIGTERM
+    tmpfs:                            挂载一个临时文件系统到容器中  value or a list
+      - type: tmpfs
+          target: /path
+          tmpfs:
+            size: 1000
+    ulimit:
+      nproc: 65536
+      nofile:
+        soft: 20000
+        hard: 40000
+secrets:
+
+volumes:
+  volume_name1:
+  volume_name2:
+networks:
+  network1:
+
+
+value or a list
+key: value
+key: 
+  - value1
+  - value2
+
+array or dict
+key:
+  key1: value1
+  key2: value2
+key:
+  - key1=value1
+  - key2=value2
