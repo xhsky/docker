@@ -1,0 +1,31 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq_${project_name}
+    init: true
+    restart: always
+    environment:
+      RABBITMQ_NODENAME: "rabbit@localhost"
+      RABBITMQ_DEFAULT_USER: ${mq_user}
+      RABBITMQ_DEFAULT_PASS: ${mq_password}
+      RABBITMQ_DEFAULT_VHOST: ${mq_vhost}
+      TZ: Asia/Shanghai
+    volumes:
+      - /data/rabbitmq_${project_name}:/var/lib/rabbitmq
+    ports:
+      - ${mq_mapping_port}:5672
+      - ${mq_web_mapping_port}:15672
+    deploy:
+      resources:
+        limits:
+          cpus: ${cpus}
+          memory: ${memory}
+    ulimits:
+      nproc: 65536
+      nofile: 65536
+    networks:
+      - mynet
+
+networks:
+  mynet:

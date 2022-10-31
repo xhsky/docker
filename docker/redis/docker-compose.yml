@@ -1,0 +1,27 @@
+version: '3'
+services:
+  redis:
+    image: redis:5
+    container_name: redis_${project_name}
+    init: true
+    command: redis-server --requirepass ${redis_password} --appendonly yes
+    restart: always
+    environment: 
+      TZ: Asia/Shanghai
+    volumes:
+      - /data/redis_${project_name}:/data
+    ports:
+      - ${redis_mapping_port}:6379
+    deploy:
+      resources:
+        limits:
+          cpus: ${cpus}
+          memory: ${memory}
+    ulimits:
+      nproc: 65536
+      nofile: 65536
+    networks:
+      - mynet
+
+networks:
+  mynet:

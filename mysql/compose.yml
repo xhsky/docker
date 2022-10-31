@@ -1,0 +1,30 @@
+version: '3.1'
+services:
+  db:
+    image: mysql:8
+    container_name: mydb1
+    init: true
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: DreamSoft_123
+      MYSQL_DATABASE: dreamdb
+      MYSQL_USER: dream
+      MYSQL_PASSWORD: DreamSoft_123
+    volumes:
+      - /data/mydata:/var/lib/mysql
+    ports:
+      - 3306:3306
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+    ulimits:
+      nproc: 65536
+      nofile: 65536
+    networks:
+      - mynet
+
+networks:
+  mynet:
