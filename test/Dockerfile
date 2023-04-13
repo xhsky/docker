@@ -1,3 +1,5 @@
 FROM centos
 
-CMD sleep 3600
+ARG TOMCAT_VERSION
+RUN echo "${TOMCAT_VERSION}"
+

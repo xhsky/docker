@@ -1,15 +1,14 @@
 # centos vm Dockerfile
 # Date: 2022年 10月 20日 星期四 11:57:38 CST
 
-ARG version=7
-FROM centos:$version
+FROM centos
 
 LABEL maintainer="x_hsky@163.com"
 
 #COPY nginx.repo /etc/yum.repos.d/
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    yum groupinstall Minimal Install -y && yum install vim wget -y && \
+    # yum groupinstall Minimal Install -y && yum install vim wget -y && \
     rm -rf /var/cache/yum/ && \
     mkdir /dream && \
     echo 'set -o vi' >> /etc/bashrc && \
